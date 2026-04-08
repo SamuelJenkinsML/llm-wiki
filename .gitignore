@@ -1,0 +1,4 @@
+.claude/projects/
+*.swp
+*.swo
+.DS_Store

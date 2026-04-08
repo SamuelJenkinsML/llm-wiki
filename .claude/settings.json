@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(~/Documents/Day to day/**)",
+      "Bash(obsidian *)",
+      "Bash(ls *)",
+      "Bash(wc *)",
+      "Bash(date *)",
+      "Bash(find *)"
+    ],
+    "deny": [
+      "Write(~/Documents/Day to day/.obsidian/**)",
+      "Write(~/Documents/Day to day/*.base)",
+      "Bash(rm *)"
+    ]
+  }
+}
