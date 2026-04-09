@@ -1,0 +1,15 @@
+[Unit]
+Description=Jarvis Health Auto Export Webhook Receiver
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki/scripts
+ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/.venv/bin/python3 /home/samuel-jenkins/Projects/llm-wiki/scripts/health-receiver.py
+Environment=HOME=/home/samuel-jenkins
+EnvironmentFile=/home/samuel-jenkins/.config/jarvis/credentials.env
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

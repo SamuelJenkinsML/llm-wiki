@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis Last.fm Data Collection
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki
+ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/run-collector.sh collect-lastfm
+Environment=HOME=/home/samuel-jenkins
+EnvironmentFile=/home/samuel-jenkins/.config/jarvis/credentials.env
+TimeoutStartSec=60

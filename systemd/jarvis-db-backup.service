@@ -1,0 +1,8 @@
+[Unit]
+Description=Jarvis DB Backup (daily SQLite snapshot)
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/samuel-jenkins/Projects/llm-wiki/scripts/backup-db.sh
+Environment=HOME=/home/samuel-jenkins
+TimeoutStartSec=120

@@ -1,0 +1,9 @@
+[Unit]
+Description=Jarvis Daily Morning Briefing Timer
+
+[Timer]
+OnCalendar=*-*-* 07:27:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

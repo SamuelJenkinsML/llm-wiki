@@ -1,0 +1,10 @@
+[Unit]
+Description=Jarvis Trend Aggregation
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki
+ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/run-collector.sh aggregate-trends
+Environment=HOME=/home/samuel-jenkins
+TimeoutStartSec=60

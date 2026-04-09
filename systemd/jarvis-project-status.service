@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis Project Status Update
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki
+ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/run-jarvis.sh project-status
+Environment=HOME=/home/samuel-jenkins
+Environment=PATH=/home/samuel-jenkins/.local/bin:/usr/local/bin:/usr/bin:/bin
+TimeoutStartSec=300

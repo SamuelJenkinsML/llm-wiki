@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis DB Maintenance (retention policy)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki
+ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/.venv/bin/python /home/samuel-jenkins/Projects/llm-wiki/scripts/query_db.py maintenance
+Environment=HOME=/home/samuel-jenkins
+Environment=PYTHONPATH=/home/samuel-jenkins/Projects/llm-wiki/scripts
+TimeoutStartSec=60

@@ -1,4 +1,10 @@
 .claude/projects/
+.claude/scheduled_tasks.lock
 *.swp
 *.swo
 .DS_Store
+scripts/.venv/
+scripts/__pycache__/
+scripts/apple-music-auth.html
+credentials.env
+scripts/tests/__pycache__/

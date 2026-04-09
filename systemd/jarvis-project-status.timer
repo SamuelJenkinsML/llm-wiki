@@ -1,0 +1,9 @@
+[Unit]
+Description=Jarvis Project Status Timer (Friday afternoon)
+
+[Timer]
+OnCalendar=Fri *-*-* 16:53:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
