@@ -1,0 +1,10 @@
+[Unit]
+Description=Jarvis Trend Aggregation
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/run-collector.sh aggregate-trends
+Environment=HOME=@@HOME@@
+TimeoutStartSec=60

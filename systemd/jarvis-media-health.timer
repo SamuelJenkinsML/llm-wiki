@@ -1,0 +1,10 @@
+[Unit]
+Description=Jarvis Media Health Timer (weekly, Sunday late evening)
+
+[Timer]
+OnCalendar=Sun *-*-* 23:30:00
+Persistent=true
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target

@@ -1,13 +1,15 @@
 Run the DAILY BRIEFING operation. Generate today's Good Morning summary.
 
+Read `vault-config.md` first to understand the vault location, structure, key files, and backlog rotation schedule.
+
 ## Data Source — SQLite Database
 
-All personal data (health, music, podcasts, session memory, user notes) is in a SQLite database queried via `query-db.py`. Run the queries below using bash:
+All personal data (health, music, podcasts, session memory, user notes) is in a SQLite database queried via `query_db.py`. Run the queries below using bash:
 
 ```bash
-SCRIPT=~/Projects/llm-wiki/scripts/query_db.py
-VENV=~/Projects/llm-wiki/scripts/.venv/bin/python
-PYTHONPATH=~/Projects/llm-wiki/scripts
+SCRIPT=./scripts/query_db.py
+VENV=./scripts/.venv/bin/python
+PYTHONPATH=./scripts
 ```
 
 ## Session Memory — Read First
@@ -23,11 +25,11 @@ PYTHONPATH=~/Projects/llm-wiki/scripts
 ## Gather Data
 
 2. Get today's date and day of week
-3. Read the current weekly note (most recent root-level YYYY-MM-DD.md in ~/Documents/Day to day/)
+3. Read the current weekly note (most recent root-level YYYY-MM-DD.md in the vault — see vault-config.md for path)
 4. Pull today's date-specific todos (look for [[today's date]] section headers)
 5. List incomplete work and life items, flag anything carrying forward 2+ weeks
 6. Check ~/Projects/ for recent file modifications (last 3 days) to determine project activity
-7. Use backlog rotation based on day of week: Mon=books (To Read.md), Tue=games (Game backlog.md), Wed=blog posts (Tech blog ideas.md), Thu=side projects, Fri=ideas, Sat=creative (DnD, Phaedrus, Music), Sun=life admin
+7. Use the backlog rotation schedule from vault-config.md for today's day of week
 8. Read exercise table from weekly note, note filled vs empty days
 9. Run `PYTHONPATH=$PYTHONPATH $VENV $SCRIPT rotation` to get backlog rotation state. Surface an item from today's category using engagement-aware rotation:
    - If the category has an `items` map, prefer items with low `surfaced_count` or never surfaced
@@ -77,9 +79,9 @@ PYTHONPATH=~/Projects/llm-wiki/scripts
 
 ## Write Output
 
-16. Write to ~/Documents/Day to day/_llm/daily/YYYY-MM-DD.md (use today's actual date)
-17. Open in Obsidian: obsidian open vault="Day to day" path="_llm/daily/YYYY-MM-DD.md"
-18. Append to ~/Documents/Day to day/_llm/log.md
+16. Write to the vault's `_llm/daily/YYYY-MM-DD.md` (use today's actual date)
+17. Open in Obsidian (use the vault name from vault-config.md): `obsidian open vault="VAULT_NAME" path="_llm/daily/YYYY-MM-DD.md"`
+18. Append to the vault's `_llm/log.md`
 
 ## Session Memory — Write Last
 

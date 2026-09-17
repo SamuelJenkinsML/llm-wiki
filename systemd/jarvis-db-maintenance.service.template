@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis DB Maintenance (retention policy)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/.venv/bin/python @@REPO_DIR@@/scripts/query_db.py maintenance
+Environment=HOME=@@HOME@@
+Environment=PYTHONPATH=@@REPO_DIR@@/scripts
+TimeoutStartSec=60

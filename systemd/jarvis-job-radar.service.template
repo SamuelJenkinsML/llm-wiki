@@ -1,0 +1,18 @@
+[Unit]
+Description=Jarvis Daily Job Radar
+After=network-online.target
+# Allow the initial run plus 4 retries within a 6h window, so a run blocked by a
+# Claude usage limit retries past the reset instead of being lost for the day.
+StartLimitIntervalSec=6h
+StartLimitBurst=5
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/run-jarvis.sh job-radar
+Environment=HOME=@@HOME@@
+Environment=PATH=@@HOME@@/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=JARVIS_TTS_DISABLE=1
+TimeoutStartSec=45min
+Restart=on-failure
+RestartSec=45min

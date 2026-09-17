@@ -131,12 +131,33 @@ def _process_to_db(conn, data: dict):
             workout_type = workout_type.replace("HKWorkoutActivityType", "").lower()
             start = workout.get("start", workout.get("startDate", ""))
             workout_day = _extract_date(start) or datetime.now(timezone.utc).strftime("%Y-%m-%d")
-            duration_min = workout.get("duration", 0)
-            if isinstance(duration_min, str):
+            duration_sec = workout.get("duration", 0)
+            if isinstance(duration_sec, str):
                 try:
-                    duration_min = float(duration_min)
+                    duration_sec = float(duration_sec)
                 except ValueError:
-                    duration_min = 0
+                    duration_sec = 0
+            duration_min = duration_sec / 60.0
+
+            def _qty(field, aggregate="first"):
+                """Extract qty from a field that may be a number, dict, or list of dicts.
+
+                aggregate: "first" returns the first value, "sum" sums all values in a list.
+                """
+                if isinstance(field, (int, float)):
+                    return field
+                if isinstance(field, dict):
+                    return field.get("qty", 0)
+                if isinstance(field, list) and field:
+                    if isinstance(field[0], dict):
+                        if aggregate == "sum":
+                            return sum(item.get("qty", 0) for item in field)
+                        return field[0].get("qty", 0)
+                    return 0
+                return 0
+
+            distance = workout.get("totalDistance") or workout.get("distance", 0)
+            energy = workout.get("totalEnergyBurned") or workout.get("activeEnergy", 0)
 
             conn.execute(
                 "INSERT OR IGNORE INTO workouts "
@@ -144,10 +165,10 @@ def _process_to_db(conn, data: dict):
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 (
                     workout_day, workout_type, start, round(duration_min, 1),
-                    round(workout.get("totalDistance", workout.get("distance", {}).get("qty", 0)), 2),
-                    round(workout.get("totalEnergyBurned", workout.get("activeEnergy", {}).get("qty", 0)), 1),
-                    workout.get("avgHeartRate", workout.get("heartRateAverage", 0)),
-                    workout.get("maxHeartRate", workout.get("heartRateMax", 0)),
+                    round(_qty(distance, aggregate="sum"), 2),
+                    round(_qty(energy, aggregate="sum") / 4.184, 1),
+                    _qty(workout.get("avgHeartRate", workout.get("heartRateAverage", 0))),
+                    _qty(workout.get("maxHeartRate", workout.get("heartRateMax", 0))),
                 ),
             )
 

@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis Apple Music Data Collection
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/run-collector.sh collect-apple-music
+Environment=HOME=@@HOME@@
+EnvironmentFile=@@CREDENTIALS@@
+TimeoutStartSec=60

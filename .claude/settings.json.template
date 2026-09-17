@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Read(~/Documents/Day to day/**)",
+      "Read(@@VAULT_PATH@@/**)",
       "Bash(obsidian *)",
       "Bash(ls *)",
       "Bash(wc *)",
@@ -9,8 +9,8 @@
       "Bash(find *)"
     ],
     "deny": [
-      "Edit(~/Documents/Day to day/.obsidian/**)",
-      "Edit(~/Documents/Day to day/*.base)",
+      "Write(@@VAULT_PATH@@/.obsidian/**)",
+      "Write(@@VAULT_PATH@@/*.base)",
       "Bash(rm *)"
     ]
   }

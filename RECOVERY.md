@@ -1,58 +1,50 @@
-# Jarvis Recovery Runbook
+# Recovery Runbook
 
-How to restore the Jarvis personal assistant system from scratch.
+How to restore the personal assistant system from scratch.
 
 ## Prerequisites
 
 - Ubuntu/Debian Linux with systemd
 - Python 3.13+
 - Git, gh CLI
-- Obsidian vault restored to `~/Documents/Day to day/`
+- Obsidian vault restored to its expected location
 
 ## 1. Clone the repo
 
 ```bash
-gh repo clone samuel-jenkins/llm-wiki ~/Projects/llm-wiki
+git clone https://github.com/YOUR_USERNAME/llm-wiki ~/Projects/llm-wiki
 cd ~/Projects/llm-wiki
 ```
 
-## 2. Set up Python environment
+## 2. Run setup
 
 ```bash
-cd scripts
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+bash setup.sh
 ```
+
+This will:
+- Create `jarvis.conf` with your paths
+- Generate `vault-config.md` from template
+- Set up Python venv
+- Generate systemd service files
+- Optionally install systemd units
 
 ## 3. Restore credentials
 
-Create `~/.config/jarvis/credentials.env` with:
-
-```
-APPLE_MUSIC_DEVELOPER_TOKEN=...
-APPLE_MUSIC_USER_TOKEN=...
-POCKETCASTS_EMAIL=...
-POCKETCASTS_PASSWORD=...
-HEALTH_WEBHOOK_TOKEN=...
-```
-
-These are stored in your password manager (not in this repo).
-
-## 4. Install systemd units
+If `~/.config/jarvis/credentials.env` wasn't backed up, recreate it from `credentials.env.example`:
 
 ```bash
-bash systemd/install.sh
+cp credentials.env.example ~/.config/jarvis/credentials.env
+# Fill in your API keys from your password manager
+```
+
+## 4. Enable systemd units
+
+```bash
 systemctl --user daemon-reload
-```
-
-Enable the always-on health receiver:
-```bash
 systemctl --user enable --now jarvis-health-receiver.service
-```
 
-Enable all timers:
-```bash
+# Enable all timers
 systemctl --user enable --now jarvis-daily.timer
 systemctl --user enable --now jarvis-weekly-review.timer
 systemctl --user enable --now jarvis-lint.timer
@@ -77,26 +69,37 @@ If restoring from backup:
 cp "_llm/data/backups/jarvis-YYYY-MM-DD.db" "_llm/data/jarvis.db"
 ```
 
-Backups are kept for 7 days in `~/Documents/Day to day/_llm/data/backups/`.
+Backups are kept for 7 days in the vault's `_llm/data/backups/` directory.
 
 If no backup exists, the collectors will recreate the schema on first run — you'll lose historical data but the system will work.
 
-## 6. Verify everything
+## 6. Restore vault-config.md
+
+If `vault-config.md` was lost, regenerate from template:
+```bash
+sed -e "s|{{VAULT_PATH}}|$YOUR_VAULT_PATH|g" \
+    -e "s|{{VAULT_NAME}}|$YOUR_VAULT_NAME|g" \
+    vault-config.md.template > vault-config.md
+```
+Then customize it to match your vault structure.
+
+## 7. Verify everything
 
 ```bash
 # Check database
-PYTHONPATH=~/Projects/llm-wiki/scripts \
-  ~/Projects/llm-wiki/scripts/.venv/bin/python \
-  ~/Projects/llm-wiki/scripts/query_db.py collector-status
+PYTHONPATH=./scripts ./scripts/.venv/bin/python ./scripts/query_db.py collector-status
 
 # Check health receiver
 curl -s http://localhost:9876/health
 
 # Run a test backup
-bash ~/Projects/llm-wiki/scripts/backup-db.sh
+bash scripts/backup-db.sh
 
 # Check timers
 systemctl --user list-timers --all | grep jarvis
+
+# Test a briefing
+./scripts/run-jarvis.sh daily-briefing
 ```
 
 ## What lives where
@@ -105,7 +108,8 @@ systemctl --user list-timers --all | grep jarvis
 |-----------|----------|-----------|
 | Scripts & config | `~/Projects/llm-wiki/` | Git + GitHub |
 | Systemd units | `~/.config/systemd/user/` (symlinks to repo) | Git + GitHub |
-| Obsidian vault | `~/Documents/Day to day/` | Not yet — manual |
-| SQLite database | `~/Documents/Day to day/_llm/data/jarvis.db` | Daily backup (7-day rotation) |
+| Obsidian vault | (see jarvis.conf) | Manual / your backup system |
+| SQLite database | vault `_llm/data/jarvis.db` | Daily backup (7-day rotation) |
 | Credentials | `~/.config/jarvis/credentials.env` | Password manager |
-| DB backups | `~/Documents/Day to day/_llm/data/backups/` | Local only |
+| DB backups | vault `_llm/data/backups/` | Local only |
+| Personal config | `jarvis.conf`, `vault-config.md` | Gitignored — regenerate via setup.sh |

@@ -8,4 +8,4 @@ WorkingDirectory=/home/samuel-jenkins/Projects/llm-wiki
 ExecStart=/home/samuel-jenkins/Projects/llm-wiki/scripts/run-jarvis.sh daily-briefing
 Environment=HOME=/home/samuel-jenkins
 Environment=PATH=/home/samuel-jenkins/.local/bin:/usr/local/bin:/usr/bin:/bin
-TimeoutStartSec=300
+TimeoutStartSec=45min

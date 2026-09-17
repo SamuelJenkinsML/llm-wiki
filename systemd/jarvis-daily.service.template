@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis Daily Morning Briefing
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/run-jarvis.sh daily-briefing
+Environment=HOME=@@HOME@@
+Environment=PATH=@@HOME@@/.local/bin:/usr/local/bin:/usr/bin:/bin
+TimeoutStartSec=45min

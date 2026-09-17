@@ -3,16 +3,19 @@
 Provides database connection, schema initialization, and helper functions
 used by all collectors and the query CLI.
 
-Database location: ~/Documents/Day to day/_llm/data/jarvis.db
+Database location: $JARVIS_VAULT_PATH/_llm/data/jarvis.db
+(defaults to ~/Documents/Day to day/_llm/data/jarvis.db)
 """
 
+import os
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 
-DEFAULT_DB_PATH = (
-    Path.home() / "Documents" / "Day to day" / "_llm" / "data" / "jarvis.db"
+_vault = os.environ.get(
+    "JARVIS_VAULT_PATH", str(Path.home() / "Documents" / "Day to day")
 )
+DEFAULT_DB_PATH = Path(_vault) / "_llm" / "data" / "jarvis.db"
 
 SCHEMA_VERSION = 1
 

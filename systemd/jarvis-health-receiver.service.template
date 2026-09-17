@@ -1,0 +1,15 @@
+[Unit]
+Description=Jarvis Health Auto Export Webhook Receiver
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=@@REPO_DIR@@/scripts
+ExecStart=@@REPO_DIR@@/scripts/.venv/bin/python3 @@REPO_DIR@@/scripts/health-receiver.py
+Environment=HOME=@@HOME@@
+EnvironmentFile=@@CREDENTIALS@@
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,15 @@
+# Jarvis Configuration
+# Copy this file to jarvis.conf and customize for your setup.
+# jarvis.conf is gitignored — your personal config stays local.
+
+# Path to your Obsidian vault
+JARVIS_VAULT_PATH="$HOME/Documents/My Vault"
+
+# Vault name as registered in Obsidian (used for CLI commands)
+JARVIS_VAULT_NAME="My Vault"
+
+# Name for your assistant (used in CLAUDE.md persona)
+JARVIS_ASSISTANT_NAME="Jarvis"
+
+# Path to credentials file (API keys, tokens)
+JARVIS_CREDENTIALS_FILE="$HOME/.config/jarvis/credentials.env"

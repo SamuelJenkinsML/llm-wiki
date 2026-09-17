@@ -1,0 +1,11 @@
+[Unit]
+Description=Jarvis Last.fm Data Collection
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+ExecStart=@@REPO_DIR@@/scripts/run-collector.sh collect-lastfm
+Environment=HOME=@@HOME@@
+EnvironmentFile=@@CREDENTIALS@@
+TimeoutStartSec=60

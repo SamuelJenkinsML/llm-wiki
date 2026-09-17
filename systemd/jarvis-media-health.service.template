@@ -1,0 +1,12 @@
+[Unit]
+Description=Jarvis Media Library Health Check (Sonarr/Radarr)
+After=graphical-session.target sonarr.service radarr.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@REPO_DIR@@
+EnvironmentFile=-@@HOME@@/.config/jarvis/credentials.env
+ExecStart=@@REPO_DIR@@/scripts/run-jarvis.sh media-health-check
+Environment=HOME=@@HOME@@
+Environment=PATH=@@HOME@@/.local/bin:/usr/local/bin:/usr/bin:/bin
+TimeoutStartSec=600

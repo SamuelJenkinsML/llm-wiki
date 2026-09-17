@@ -50,7 +50,9 @@ def apple_music_get(endpoint: str, dev_token: str, params: dict | None = None) -
         timeout=30,
     )
     if not resp.ok:
-        print(f"API error {resp.status_code} for {endpoint}: {resp.text}", file=sys.stderr)
+        print(
+            f"API error {resp.status_code} for {endpoint}: {resp.text}", file=sys.stderr
+        )
         resp.raise_for_status()
     return resp.json()
 
@@ -99,16 +101,23 @@ def _write_to_db(conn, tracks: list[dict], rotation: list[dict], today: str):
         for t in tracks:
             track_id = t.get("id", "")
             if not track_id:
-                track_id = f"{t.get('track', '')}|{t.get('artist', '')}|{t.get('album', '')}"
+                track_id = (
+                    f"{t.get('track', '')}|{t.get('artist', '')}|{t.get('album', '')}"
+                )
             conn.execute(
                 "INSERT OR IGNORE INTO music_tracks "
                 "(date, track_id, track, artist, album, genre, duration_ms, played_at, url) "
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 (
-                    today, track_id,
-                    t.get("track", ""), t.get("artist", ""), t.get("album", ""),
-                    t.get("genre", ""), t.get("duration_ms", 0),
-                    t.get("played_at", ""), t.get("url", ""),
+                    today,
+                    track_id,
+                    t.get("track", ""),
+                    t.get("artist", ""),
+                    t.get("album", ""),
+                    t.get("genre", ""),
+                    t.get("duration_ms", 0),
+                    t.get("played_at", ""),
+                    t.get("url", ""),
                 ),
             )
             rows += 1
@@ -120,18 +129,32 @@ def _write_to_db(conn, tracks: list[dict], rotation: list[dict], today: str):
                 "VALUES (?, ?, ?, ?, ?, ?)",
                 (
                     today,
-                    item.get("name", ""), item.get("artist", ""),
-                    item.get("type", ""), item.get("url", ""),
+                    item.get("name", ""),
+                    item.get("artist", ""),
+                    item.get("type", ""),
+                    item.get("url", ""),
                     item.get("id", ""),
                 ),
             )
 
         conn.commit()
         duration = time.monotonic() - t0
-        log_run(conn, "apple-music", "success", rows_affected=rows, duration_seconds=round(duration, 2))
+        log_run(
+            conn,
+            "apple-music",
+            "success",
+            rows_affected=rows,
+            duration_seconds=round(duration, 2),
+        )
     except Exception as e:
         duration = time.monotonic() - t0
-        log_run(conn, "apple-music", "error", error_message=str(e), duration_seconds=round(duration, 2))
+        log_run(
+            conn,
+            "apple-music",
+            "error",
+            error_message=str(e),
+            duration_seconds=round(duration, 2),
+        )
         raise
 
 
@@ -146,7 +169,10 @@ def main():
     if not MUSIC_USER_TOKEN:
         missing.append("APPLE_MUSIC_USER_TOKEN")
     if missing:
-        print(f"Error: Missing environment variables: {', '.join(missing)}", file=sys.stderr)
+        print(
+            f"Error: Missing environment variables: {', '.join(missing)}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")

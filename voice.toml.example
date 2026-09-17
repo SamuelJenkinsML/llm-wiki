@@ -1,0 +1,23 @@
+# Jarvis Voice Configuration
+# Copy to ~/.config/jarvis/voice.toml and adjust values.
+
+[tts]
+enabled = true
+# voice_id is loaded from ELEVENLABS_VOICE_ID env var (credentials.env)
+model_id = "eleven_turbo_v2_5"
+# Speech mode: "full" (speak everything), "truncate" (first N sentences), "smart" (auto)
+mode = "smart"
+truncate_sentences = 3
+smart_threshold_words = 200
+
+[stt]
+enabled = true
+model = "base.en"          # tiny.en | base.en | small.en | medium.en
+compute_type = "int8"      # int8 (fast, CPU) | float16 (GPU) | float32 (accurate)
+silence_ms = 800           # silence duration to end utterance
+tmux_target = "jarvis:0.0" # tmux pane where Claude Code is running
+auto_send = false           # true = auto-press Enter after transcription
+
+[daily]
+vault_path = "~/Documents/Day to day"
+sections = ["Today at a Glance", "Today's Focus", "Health & Training", "Backlog Pick of the Day"]

@@ -2,8 +2,15 @@
 # Daily SQLite backup using Python's sqlite3.backup() — safe, consistent even under load
 set -euo pipefail
 
-DB="$HOME/Documents/Day to day/_llm/data/jarvis.db"
-BACKUP_DIR="$HOME/Documents/Day to day/_llm/data/backups"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Source config if it exists; fall back to defaults
+[ -f "$REPO_DIR/jarvis.conf" ] && source "$REPO_DIR/jarvis.conf"
+JARVIS_VAULT_PATH="${JARVIS_VAULT_PATH:-$HOME/Documents/Day to day}"
+
+DB="$JARVIS_VAULT_PATH/_llm/data/jarvis.db"
+BACKUP_DIR="$JARVIS_VAULT_PATH/_llm/data/backups"
 MAX_BACKUPS=7
 
 if [ ! -f "$DB" ]; then
